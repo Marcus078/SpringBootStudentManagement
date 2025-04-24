@@ -143,6 +143,9 @@ public class StudentService {
 
 
     public Grade updateStudentGrade(String studentNumber, String moduleName, double newGrade) {
+        if (newGrade < 0 || newGrade > 100) {
+            throw new IllegalArgumentException("Grade must be between 0 and 100");
+        }
         Student student = studentRepository.findByStudentNumber(studentNumber)
                 .orElseThrow(() -> new StudentNotFoundException("Student not found: " + studentNumber));
 

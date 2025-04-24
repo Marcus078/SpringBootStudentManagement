@@ -2,6 +2,7 @@ package com.example.StudentManagement.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -25,9 +26,15 @@ public class Grade {
     @ManyToOne
     private Module module;
 
+    @Column(nullable = false)
+    @Min(value = 0, message = "Grade must be at least 0.")
+    @Max(value = 100, message = "Grade cannot exceed 100.")
     private double grade;
+
+    //Date when the grade was assigned
     private LocalDateTime dateAssigned;
 
+    //Name of the person who updated the grade
     @ManyToOne
     private Admin updatedBy;
 

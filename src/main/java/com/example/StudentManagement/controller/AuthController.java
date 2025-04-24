@@ -1,10 +1,11 @@
 package com.example.StudentManagement.controller;
 
-
 import com.example.StudentManagement.Services.AdminService;
 import com.example.StudentManagement.model.Admin;
-import lombok.RequiredArgsConstructor;
+import com.example.StudentManagement.response.ApiResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,16 +20,20 @@ public class AuthController {
     }
 
 
-    // Admin Registration Endpoint
+    // Admin Register Endpoint
     @PostMapping("/register")
-    public Admin register(@RequestBody Admin admin) {
-        return adminService.registerUser(admin);
+    public ResponseEntity<ApiResponse<Admin>> register(@RequestBody @Valid Admin admin) {
+        Admin savedAdmin = adminService.registerUser(admin);
+        ApiResponse<Admin> response = new ApiResponse<>(true, "Admin registered successfully", savedAdmin);
+        return ResponseEntity.ok(response);
     }
 
     // Admin Login Endpoint
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest loginRequest) {
-        return adminService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
+    public ResponseEntity<ApiResponse<String>> login(@RequestBody LoginRequest loginRequest) {
+        String token = adminService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
+        ApiResponse<String> response = new ApiResponse<>(true, "Login successful", token);
+        return ResponseEntity.ok(response);
     }
 
     // Static class to capture login request

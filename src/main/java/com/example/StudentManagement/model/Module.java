@@ -2,6 +2,7 @@ package com.example.StudentManagement.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Entity
@@ -14,6 +15,7 @@ public class Module {
     private Long id;
 
     @Column(nullable = false, unique = true, length = 225)
+    @Size(min = 2, max = 225, message = "Module name must be between 2 and 225 characters.")
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)

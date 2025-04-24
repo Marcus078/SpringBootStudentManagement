@@ -3,22 +3,33 @@ package com.example.StudentManagement.Utilities;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.security.Key;
 import java.util.Date;
 
 import static io.jsonwebtoken.Jwts.*;
 
 @Component
 public class JwtUtil {
-    private String secretKey = "RBip1mbHt3Eq4CXlf6+GdgdK1+epRW8+pZlEZwvK3Vs=";  // Ideally, this should be stored securely (e.g., in application properties)
 
-    // Generate JWT Token
+    @Value("${jwt.secret}")
+    //private String secretKey =// "RBip1mbHt3Eq4CXlf6+GdgdK1+epRW8+pZlEZwvK3Vs=";  // Ideally, this should be stored securely (e.g., in application properties)
+    private String secretKey;
+
+    private Key getSigningKey(){
+        return Keys.hmacShaKeyFor(secretKey.getBytes());
+    }
+
+    // Generate JWT Token with 1-hour expiry
     public String generateToken(String email) {
         return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))  // Set token expiration (1 hour)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .subject(email)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 ))  // Set token expiration (1 hour)
+                .signWith(getSigningKey())
                 .compact();
     }
 
@@ -33,7 +44,7 @@ public class JwtUtil {
     // Extract all claims
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(secretKey)
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

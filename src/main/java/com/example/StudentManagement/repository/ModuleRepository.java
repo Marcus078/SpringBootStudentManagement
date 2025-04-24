@@ -9,6 +9,5 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
     // find module by name
     Optional<Module> findByNameIgnoreCase(String name);
 
-
 }
 

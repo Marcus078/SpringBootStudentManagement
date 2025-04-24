@@ -24,6 +24,10 @@ public class AdminService {
     }
 
     public Admin registerUser(Admin admin) {
+        //check if email and password are not null
+        if (admin.getEmail() == null || admin.getPassword() == null) {
+            throw new IllegalArgumentException("Email and password must not be null");
+        }
         // Hash password before saving
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         return adminRepository.save(admin);
@@ -42,31 +46,12 @@ public class AdminService {
                 // Generate JWT token
                 return jwtUtil.generateToken(admin.getEmail());
             } else {
-                throw new AdminNotFoundException("Invalid credentials"); // Proper exception handling
+                //exception handling
+                throw new AdminNotFoundException("Invalid credentials");
             }
         } else {
-            throw new AdminNotFoundException("Admin not found with email: " + email); // Proper exception handling
+            throw new AdminNotFoundException("Admin not found with email: " + email);
         }
     }
 
-/*
-    public String loginUser(String email, String password) {
-        Optional<Admin> userOpt = adminRepository.findByEmail(email);
-
-        if (userOpt.isPresent()) {
-            Admin admin= userOpt.get();//get the object not a single value
-
-            // Compare the password with the hashed password in the database
-            if (passwordEncoder.matches(password,admin.getPassword())) {
-                // Generate JWT token
-                return jwtUtil.generateToken(admin.getEmail());
-            } else {//is password doesn't match with hashed password in the database
-                throw new RuntimeException("Invalid credentials");
-            }
-        } else {//if email is not found
-            throw new RuntimeException("User not found");
-        }
-    }
-
- */
 }

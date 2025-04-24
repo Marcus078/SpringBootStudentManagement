@@ -14,13 +14,21 @@ Student search by name or course
 
 Auto timestamps for creation and modifications
 
+Comprehensive unit test coverage for StudentService and AdminService
+
+Graceful error handling with custom exceptions
+
+Secure endpoints using Spring Security and JWT filter
+
 Tech Stack
 
-Backend: Spring Boot, Spring Security, JWT, Hibernate, JPA
+.Backend: Spring Boot, Spring Security, JWT, Hibernate, JPA
 
-Database: MySQL
+.Database: MySQL
 
-Build Tool: Maven
+.Build Tool: Maven
+
+.Testing: JUnit 5, Mockito
 
 📂 Project Structure
 
@@ -40,19 +48,54 @@ src/
 
 |__config/            #config
 
+|_test/              # Unit tests for services
+
 resources/
 
-|__application.properties # database
+|__application.properties # database connection and settings
 
 Admin Authentication
 
 Login endpoint: /api/auth/login
 
-Returns a JWT on successful login
+example: Login Endpoint:
+
+POST /api/auth/login
+
+Request Body:
+
+json
+
+{
+
+  "email": "admin@example.com",
+  
+  "password": "yourPassword"
+  
+}
+
+Response:
+On success, returns a JWT token:
+
+json
+
+{
+
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  
+}
+
+How to Use the Token
+
+Include the JWT in the Authorization header of all protected requests:
 
 Add this token in Authorization: Bearer <token> header for all protected routes
 
-📋 API Highlights
+example "Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+Without the token or with an invalid/expired token, access to protected routes will be denie
+
+API Highlights
 
 Student
 
@@ -64,7 +107,7 @@ GET /api/students/{studentNumber} – Get by student number
 
 PUT /api/students/{studentNumber}/grades/{moduleName}?grade=85 – Update grade
 
-📘 Course & Module
+Course & Module
 
 GET /api/students/courses – All courses
 
@@ -87,5 +130,5 @@ POST /api/students/create?courseName=Computer Science
 }
 
 
-Author
+Author:
 Built with passion for learning and growth by Mikateko Mashila
